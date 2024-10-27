@@ -1,32 +1,11 @@
-<template>
-  <header class="header">
-    <div class="header__logo">
-      <a href="index.html" class="logo">
-        <img
-          src="../assets/img/logo.svg"
-          alt="V!U!E! Pizza logo"
-          width="90"
-          height="40"
-        />
-      </a>
-    </div>
-    <div class="header__cart">
-      <a href="cart.html">0 ₽</a>
-    </div>
-    <div class="header__user">
-      <a href="#" class="header__login"><span>Войти</span></a>
-    </div>
-  </header>
-</template>
-
-<style lang="scss" scoped>
-@import "@/assets/scss/ds-system/ds.scss";
-@import "@/assets/scss/mixins/mixins.scss";
 .header {
   position: relative;
   z-index: 2;
+
   display: flex;
+
   padding: 0 2.12%;
+
   background-color: $green-500;
   box-shadow: $shadow-light;
 }
@@ -42,12 +21,16 @@
 
   a {
     @include b-s16-h19;
+
     display: block;
+
     padding-top: 21px;
     padding-right: 15px;
     padding-bottom: 21px;
     padding-left: 58px;
+
     transition: 0.3s;
+
     color: $white;
     background-color: $green-500;
     background-image: url("../img/cart.svg");
@@ -129,13 +112,14 @@
     height: 32px;
     margin-right: 8px;
 
-    content: "";
+    content: '';
     vertical-align: middle;
 
     background: url(../img/login.svg) no-repeat center;
     background-size: auto 50%;
   }
 }
+
 
 .header__login {
   &::after {
@@ -145,11 +129,10 @@
     height: 32px;
     margin-left: 8px;
 
-    content: "";
+    content: '';
     vertical-align: middle;
 
     background: url(../img/login.svg) no-repeat center;
     background-size: auto 50%;
   }
 }
-</style>
