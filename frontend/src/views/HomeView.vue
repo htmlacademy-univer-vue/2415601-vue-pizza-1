@@ -7,11 +7,12 @@
                     <div class="sheet">
                         <h2 class="title title--small sheet__title">Выберите
                             тесто</h2>
-                        <div v-for="d in dough"
-                        :key="d.id"
-                        class="sheet__content dough">
-                            <label class="dough__input dough__input--light">
-                                <input type="radio" name="dought" v-bind:value="dough_values[d.id]"
+                        <div v-for="d in dough" :key="d.id"
+                            class="sheet__content dough">
+                            <label
+                                v-bind:class="`dough__input dough__input--${dough_values[d.id]}`">
+                                <input type="radio" name="dought"
+                                    v-bind:value="dough_values[d.id]"
                                     class="visually-hidden" checked>
                                 <b>{{ d.name }}</b>
                                 <span>Из твердых сортов пшеницы</span>
@@ -27,14 +28,14 @@
                         <h2 class="title title--small sheet__title">Выберите
                             размер</h2>
 
-                        <div v-for="diameter in sizes"
-                        :key="diameter.id"
-                        class="sheet__content diameter">
+                        <div v-for="diameter in sizes" :key="diameter.id"
+                            class="sheet__content diameter">
                             <label
-                                class="diameter__input diameter__input--small">
+                                v-bind:class="`diameter__input diameter__input--${size_values[diameter.id]}`">
                                 <input type="radio" name="diameter"
-                                v-bind:value="size_values[diameter.id]" class="visually-hidden">
-                                <span>{{diameter.name}}</span>
+                                    v-bind:value="size_values[diameter.id]"
+                                    class="visually-hidden">
+                                <span>{{ diameter.name }}</span>
                             </label>
                         </div>
                     </div>
@@ -47,15 +48,15 @@
 
                         <div class="sheet__content ingredients">
 
-                            <div v-for="sauce in sauces"
-                            :key="sauce.id"
-                            class="ingredients__sauce">
+                            <div
+                                class="ingredients__sauce">
                                 <p>Основной соус:</p>
 
-                                <label class="radio ingredients__input">
+                                <label v-for="sauce in sauces" :key="sauce.id" class="radio ingredients__input">
                                     <input type="radio" name="sauce"
-                                        v-bind:value="sauce_values[sauce.id]" checked>
-                                    <span>{{sauce.name}}</span>
+                                        v-bind:value="sauce_values[sauce.id]"
+                                        checked>
+                                    <span>{{ sauce.name }}</span>
                                 </label>
                             </div>
 
@@ -68,7 +69,7 @@
                                         class="ingredients__item">
                                         <span
                                             class="filling filling--ingredient">{{
-                                            ingredient.name }}</span>
+                                                ingredient.name }}</span>
 
                                         <div
                                             class="counter counter--orange ingredients__counter">
@@ -133,25 +134,85 @@
 </template>
 
 <script setup>
-    import dough from '../mocks/dough.json'
-    import ingredients from '../mocks/ingredients.json'
-    import sauces from '../mocks/sauces.json'
-    import sizes from '../mocks/sizes.json'
+import dough from '../mocks/dough.json'
+import ingredients from '../mocks/ingredients.json'
+import sauces from '../mocks/sauces.json'
+import sizes from '../mocks/sizes.json'
 
-    const dough_values = {
-        1: "light",
-        2: "large"
-    };
-
- const size_values = {
-    1: "small",
-  2: "normal",
-  3: "big",
- };
-
- const sauce_values = {
-    1: "tomato",
-    2: "creamy",
- };
+import dough_values from '../common/data/doughSizes'
+import size_values from '../common/data/sizes'
+import sauce_values from '../common/data/sauces'
 
 </script>
+
+<style lang="scss" scoped>
+@import "@/assets/scss/ds-system/ds.scss";
+@import "@/assets/scss/mixins/mixins.scss";
+.content {
+  padding-top: 20px;
+}
+
+.content__wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  width: 920px;
+  margin: 0 auto;
+  padding-right: 2.12%;
+  padding-bottom: 30px;
+  padding-left: 2.12%;
+}
+
+.content__dough {
+  width: 527px;
+  margin-top: 15px;
+  margin-right: auto;
+  margin-bottom: 15px;
+}
+
+.content__diameter {
+  width: 373px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.content__ingredients {
+  width: 527px;
+  margin-top: 15px;
+  margin-right: auto;
+  margin-bottom: 15px;
+}
+
+.content__pizza {
+  width: 373px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.content__constructor {
+  width: 315px;
+  margin-top: 25px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.content__result {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 25px;
+
+  p {
+    @include b-s24-h28;
+
+    margin: 0;
+  }
+
+  button {
+    margin-left: 12px;
+    padding: 16px 45px;
+  }
+}
+</style>

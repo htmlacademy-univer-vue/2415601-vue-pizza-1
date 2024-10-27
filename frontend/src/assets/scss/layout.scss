@@ -1,29 +1,18 @@
-<template>
-  <div class="app_layout">
-    <app-header />
-    <slot />
-  </div>
-</template>
-
-<script setup>
-import AppHeader from "./AppHeader.vue";
-</script>
-
-<style lang="scss" scoped>
-@import "@/assets/scss/ds-system/ds.scss";
-@import "@/assets/scss/mixins/mixins.scss";
 .layout__sidebar {
   position: fixed;
   z-index: 2;
   top: 0;
   left: 0;
+
   width: 180px;
   height: 100%;
+
   background-color: rgba($green-500, 0.05);
 }
 
 .layout__logo {
   display: block;
+
   margin-bottom: 30px;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -82,4 +71,3 @@ import AppHeader from "./AppHeader.vue";
 .layout__address {
   margin-top: 16px;
 }
-</style>
