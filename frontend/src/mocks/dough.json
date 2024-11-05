@@ -2,6 +2,7 @@
   {
     "id": 1,
     "name": "Тонкое",
+    "type": "light",
     "image": "dough-light.svg",
     "description": "Из твердых сортов пшеницы",
     "price": 300
@@ -9,6 +10,7 @@
   {
     "id": 2,
     "name": "Толстое",
+    "type": "large",
     "image": "dough-large.svg",
     "description": "Из твердых сортов пшеницы",
     "price": 300

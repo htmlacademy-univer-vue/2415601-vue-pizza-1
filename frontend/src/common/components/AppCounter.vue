@@ -1,96 +1,95 @@
 <template>
-    <div class="counter">
+    <div class="counter" :class="{ ingredients__counter: ingredientsCounter }">
       <button
         type="button"
         class="counter__button counter__button--minus"
-        :disabled="currentValue === 0"
-        @click="currentValue--"
+        :disabled="value === min"
+        @click="decrement"
       >
         <span class="visually-hidden">Меньше</span>
       </button>
-  
       <input
         type="text"
         name="counter"
         class="counter__input"
-        v-model.number="currentValue"
+        :value="value"
+        @input="set"
       />
-  
       <button
         type="button"
         class="counter__button counter__button--plus"
-        :class="{ 'counter__button--secondary': secondaryStyle }"
-        :disabled="currentValue === max"
-        @click="currentValue++"
+        :class="{ 'counter__button--orange': accent }"
+        :disabled="value === max"
+        @click="increment"
       >
         <span class="visually-hidden">Больше</span>
       </button>
     </div>
   </template>
   
-  <script>
-  import { getPositiveIntFromValue } from "@/common/utils.js";
-  
-  const MAX_COUNT = 99;
-  
-  export default {
-    name: "BaseCounter",
-  
-    props: {
-      value: {
-        type: Number,
-        default: 0,
-      },
-  
-      max: {
-        type: Number,
-        default: MAX_COUNT,
-      },
-  
-      secondaryStyle: {
-        type: Boolean,
-        default: false,
-      },
+  <script lang="ts" setup>
+  const props = defineProps({
+    value: {
+      type: Number,
+      required: true,
     },
-  
-    computed: {
-      currentValue: {
-        get() {
-          return this.value;
-        },
-  
-        set(value) {
-          this.$emit("input", Math.min(getPositiveIntFromValue(value), this.max));
-        },
-      },
+    accent: {
+      type: Boolean,
+      default: false,
     },
+    max: {
+      type: Number,
+      default: 3,
+    },
+    min: {
+      type: Number,
+      default: 0,
+    },
+    ingredientsCounter: {
+      type: Boolean,
+      default: true,
+    },
+  });
+  const emit = defineEmits(["update:value"]);
+  
+  const set = (event) => {
+    const newValue = Number(event.target.value) || 0;
+    emit("update:value", newValue);
+  };
+  
+  const increment = () => {
+    if (props.value < props.max) {
+      emit("update:value", props.value + 1);
+    }
+  };
+  
+  const decrement = () => {
+    if (props.value > props.min) {
+      emit("update:value", props.value - 1);
+    }
   };
   </script>
   
   <style lang="scss" scoped>
-  .counter {
-    display: flex;
+  @import "@/assets/scss/app.scss";
   
-    justify-content: space-between;
-    align-items: center;
+  .ingredients__counter {
+    width: 54px;
+    margin-top: 10px;
+    margin-left: 36px;
   }
   
   .counter__button {
     $el: &;
     $size_icon: 50%;
-  
     position: relative;
-  
     display: block;
-  
     width: 16px;
     height: 16px;
     margin: 0;
     padding: 0;
-  
     cursor: pointer;
     transition: 0.3s;
-  
     border: none;
     border-radius: 50%;
     outline: none;
@@ -100,12 +99,9 @@
   
       &::before {
         @include p_center-all;
-  
         width: $size_icon;
         height: 2px;
-  
         content: "";
-  
         border-radius: 2px;
         background-color: $black;
       }
@@ -136,25 +132,19 @@
   
       &::before {
         @include p_center-all;
-  
         width: $size_icon;
         height: 2px;
-  
         content: "";
-  
         border-radius: 2px;
         background-color: $white;
       }
   
       &::after {
         @include p_center-all;
-  
         width: $size_icon;
         height: 2px;
-  
         content: "";
         transform: translate(-50%, -50%) rotate(90deg);
-  
         border-radius: 2px;
         background-color: $white;
       }
@@ -173,12 +163,11 @@
   
       &:disabled {
         cursor: default;
-  
         opacity: 0.3;
       }
     }
   
-    &--secondary {
+    &--orange {
       background-color: $orange-200;
   
       &:hover:not(:active):not(:disabled) {
@@ -193,14 +182,11 @@
   
   .counter__input {
     @include r-s14-h16;
-  
     box-sizing: border-box;
     width: 22px;
     margin: 0;
     padding: 0 3px;
-  
     text-align: center;
-  
     color: $black;
     border: none;
     border-radius: 10px;
@@ -210,5 +196,11 @@
     &:focus {
       box-shadow: inset $shadow-regular;
     }
+  }
+  .counter {
+    display: flex;
+  
+    justify-content: space-between;
+    align-items: center;
   }
   </style>
