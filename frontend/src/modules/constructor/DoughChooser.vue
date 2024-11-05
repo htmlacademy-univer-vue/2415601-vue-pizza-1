@@ -47,8 +47,7 @@ const getImage = (image) => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/ds-system/ds.scss";
-@import "@/assets/scss/mixins/mixins.scss";
+@import "@/assets/scss/app.scss";
 
 .content__dough {
   width: 527px;
