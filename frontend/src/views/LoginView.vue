@@ -15,6 +15,7 @@
             type="email"
             name="email"
             placeholder="example@mail.ru"
+            required
           />
         </label>
       </div>
@@ -27,6 +28,7 @@
             type="password"
             name="pass"
             placeholder="***********"
+            required
           />
         </label>
       </div>
@@ -39,22 +41,18 @@
 import { SectionTitle } from "../common/components";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import { useProfileStore } from "../stores";
+import { useAuthStore } from "../stores";
 
 const router = useRouter();
-const profileStore = useProfileStore();
+const authStore = useAuthStore();
 
 const user = reactive({
   email: "",
   password: "",
 });
-const login = () => {
-  try {
-    profileStore.login(user);
-    router.push("/user");
-  } catch (error) {
-    alert(error);
-  }
+const login = async () => {
+  const answer = await authStore.login(user);
+  console.log(answer);
 };
 </script>
 

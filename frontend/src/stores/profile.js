@@ -67,5 +67,11 @@ export const useProfileStore = defineStore("profile", {
       );
       this.addresses.splice(index, 1, newAddress);
     },
+    setAddresses(addresses) {
+      this.addresses = addresses;
+    },
+    setOrders(orders) {
+      this.orders = orders;
+    }
   },
 });
