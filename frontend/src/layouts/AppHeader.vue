@@ -14,16 +14,37 @@
       <router-link to="/cart">{{ cartStore.totalCartPrice }} ₽</router-link>
     </div>
     <div class="header__user">
-      <router-link class="header__login" to="/sign-in"
+      <router-link
+        v-if="authStore.user === null"
+        class="header__login"
+        to="/sign-in"
         ><span>Войти</span></router-link
       >
+      <div v-else class="header__user">
+        <router-link to="/user/profile">
+          <picture>
+            <img
+              src="@/assets/img/users/user5.jpg"
+              srcset="@/assets/img/users/user5@2x.jpg"
+              :alt="authStore.user.name"
+              width="32"
+              height="32"
+            />
+          </picture>
+          <span>{{ authStore.user.name }}</span></router-link
+        >
+        <router-link to="/" class="header__logout" @click="authStore.logout"
+          ><span>Выйти</span></router-link
+        >
+      </div>
     </div>
   </header>
 </template>
 
 <script setup>
-import { useCartStore } from "../stores";
+import { useCartStore, useAuthStore } from "../stores";
 const cartStore = useCartStore();
+const authStore = useAuthStore();
 </script>
 
 <style lang="scss" scoped>

@@ -36,7 +36,7 @@ export const usePizzaStore = defineStore("pizza", {
         0
       );
 
-      const multiplier = state.size.multiplier;
+      const multiplier = state?.size?.multiplier ?? 1;
       return (
         multiplier *
         (state.sauce.price + state.dough.price + ingredientsTotalPrice)

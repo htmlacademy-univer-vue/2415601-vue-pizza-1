@@ -3,32 +3,7 @@ import { defineStore } from "pinia";
 export const useCartStore = defineStore("cart", {
   state: () => ({
     pizzas: [],
-    misc: [
-      {
-        id: 0,
-        name: "Coca-Cola 0,5 литра",
-        cost: "x 56 ₽",
-        src: "/src/assets/img/cola.svg",
-        price: 56,
-        quantity: 0,
-      },
-      {
-        id: 1,
-        name: "Острый соус",
-        cost: "x 30 ₽",
-        src: "/src/assets/img/sauce.svg",
-        price: 30,
-        quantity: 0,
-      },
-      {
-        id: 2,
-        name: "Картошка из печи",
-        cost: "x 56 ₽",
-        src: "/src/assets/img/potato.svg",
-        price: 56,
-        quantity: 0,
-      },
-    ],
+    misc: [],
   }),
   getters: {
     totalCartPrice: (state) => {
@@ -46,6 +21,39 @@ export const useCartStore = defineStore("cart", {
     },
     getMisc: (state) => {
       return state.misc;
+    },
+    getFilteredPizzas: (state) => {
+      let filteredPizzas = [];
+      let ingredientss = [];
+
+      state.pizzas.map((pizza) => {
+        pizza.ingredients.map((ingredient) =>
+          ingredientss.push({
+            ingredientId: ingredient.id,
+            quantity: ingredient.quantity,
+          })
+        );
+        filteredPizzas.push({
+          name: pizza.name,
+          quantity: pizza.quantity,
+          ingredients: ingredientss,
+          sauceId: pizza.sauce.id,
+          doughId: pizza.dough.id,
+          sizeId: pizza.size.id,
+        });
+      });
+      return filteredPizzas;
+    },
+    getFilteredMiscs: (state) => {
+      let filteredMiscs = [];
+
+      state.misc.map((misc) => {
+        filteredMiscs.push({
+          miscId: misc.id,
+          quantity: misc.quantity,
+        });
+      });
+      return filteredMiscs;
     },
   },
   actions: {
@@ -85,35 +93,17 @@ export const useCartStore = defineStore("cart", {
     deleteMisc(id) {
       const miscExist = this.misc.find((item) => item.id === id);
       miscExist.quantity -= 1;
+      if (miscExist.quantity === 0) {
+        this.misc = this.misc.filter((misc) => misc.id !== miscExist.id);
+      }
     },
     clean() {
       this.pizzas = [];
-      this.misc = [
-        {
-          id: 0,
-          name: "Coca-Cola 0,5 литра",
-          cost: "x 56 ₽",
-          src: "/src/assets/img/cola.svg",
-          price: 56,
-          quantity: 0,
-        },
-        {
-          id: 1,
-          name: "Острый соус",
-          cost: "x 30 ₽",
-          src: "/src/assets/img/sauce.svg",
-          price: 30,
-          quantity: 0,
-        },
-        {
-          id: 2,
-          name: "Картошка из печи",
-          cost: "x 56 ₽",
-          src: "/src/assets/img/potato.svg",
-          price: 56,
-          quantity: 0,
-        },
-      ];
+      this.misc = [];
+    },
+    setMiscs(miscs) {
+      this.misc = miscs;
+      console.log(`miscs: ${this.misc} and ${miscs}`);
     },
   },
 });

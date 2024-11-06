@@ -31,7 +31,7 @@
 <script setup>
 import { SheetCard } from "../../common/components";
 defineProps({
-  normalizedSizes: { type: Object, required: true },
+  normalizedSizes: { type: Array, required: true },
   modelValue: {
     type: Object,
     required: true,

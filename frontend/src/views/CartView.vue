@@ -22,7 +22,7 @@
         />
 
         <MiscList
-          :miscs="cartStore.getMisc"
+          :miscs="miscs"
           @addMisc="cartStore.addMisc"
           @deleteMisc="cartStore.deleteMisc"
         />
@@ -55,7 +55,8 @@
           class="button"
           :disabled="
             !cartStore.pizzas.length ||
-            ( addressOption > 0 && (address.street === '' || address.building === ''))
+            (addressOption > 0 &&
+              (address.street === '' || address.building === ''))
           "
         >
           Оформить заказ
@@ -71,54 +72,94 @@ import { SectionTitle } from "../common/components";
 import PizzaList from "../modules/cart/PizzaList.vue";
 import MiscList from "../modules/cart/MiscList.vue";
 import AddressForm from "../modules/cart/AddressForm.vue";
-import { useCartStore, useProfileStore } from "../stores";
+import {
+  useCartStore,
+  useProfileStore,
+  useAuthStore,
+  useDataStore,
+} from "../stores";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 const profileStore = useProfileStore();
+const dataStore = useDataStore();
 const cartStore = useCartStore();
-const addressOption = ref(0);
+const authStore = useAuthStore();
 
-const setAddressOption = (value) => {
-  console.log(value);
-  addressOption.value = value;
-};
+const miscs = computed(() => {
+  return dataStore.misc;
+});
+
+const addressOption = ref(0);
 
 const address = reactive({
   street: "",
   building: "",
   flat: "",
+  phone: "",
 });
+
+const setAddressOption = (value) => {
+  addressOption.value = value;
+
+  if (value > 2) {
+    // const name = selectList[value];
+    const list = profileStore.addresses.map((address) => address.name);
+    const llist = ["Заберу сам", "Новый адрес", ...list];
+    //return ["Заберу сам", "Новый адрес", ...list];
+    const name = llist[value];
+
+    const addresss = profileStore.addresses.find(
+      (address) => address.name === name
+    );
+    address.building = addresss.building;
+    address.flat = addresss.flat;
+    address.street = addresss.street;
+  } else if (value === 0) {
+    address.building = "";
+    address.flat = "";
+    address.street = "";
+  }
+};
 
 const setAddressInfo = (category, value) => {
   address[category] = value;
 };
 
 const createOrder = () => {
-  let orderAddress = "";
+  // let orderAddress = "";
 
   if (addressOption.value == 0) {
-    orderAddress = "Заберу сам";
+    address.building = "Заберу сам";
+    address.flat = "Заберу сам";
+    address.street = "Заберу сам";
   } else if (addressOption.value == 1) {
     profileStore.addAddress({
-      ...address,
-      userId: profileStore.id,
-      id: Math.random(),
-      name: "",
+      name: `Адрес №${profileStore.addresses.length + 1}`,
+      userId: authStore.user.id,
+      street: address.street,
+      building: address.building,
+      flat: address.flat,
       comment: "",
     });
-    orderAddress = Object.values(address).join(", ");
+    // orderAddress = Object.values(address).join(", ");
   } else {
-    orderAddress = profileStore.addresses[0].orderAddress;
+    // orderAddress = profileStore.addresses[0].orderAddress;
   }
 
   const order = {
-    id: Date.now(),
-    orderPizzas: cartStore.pizzas,
-    orderMisc: cartStore.misc,
-    orderAddress,
-    price: cartStore.totalCartPrice,
+    userId: authStore.user.id,
+    pizzas: cartStore.getFilteredPizzas,
+    misc: cartStore.getFilteredMiscs,
+    address: {
+      street: address.street,
+      building: address.building,
+      flat: address.flat,
+      comment: "",
+    },
+    phone: address.phone,
+    //price: cartStore.totalCartPrice,
   };
 
   profileStore.addOrder(order);
