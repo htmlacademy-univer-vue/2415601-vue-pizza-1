@@ -60,11 +60,13 @@ import {
 } from "../modules/constructor"; // компоненты конструктора пиццы
 
 import { useDataStore, usePizzaStore, useCartStore } from "../stores";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 const cartStore = useCartStore();
 const dataStore = useDataStore();
 const pizzaStore = usePizzaStore();
 const route = useRoute();
+
+const router = useRouter();
 const { id } = route.params;
 
 if (id)
@@ -82,8 +84,10 @@ else
 const addPizza = () => {
   if (id) {
     cartStore.editPizza(pizzaStore.getPizzaInfo);
+    router.push("/cart");
   } else {
     cartStore.addPizza(pizzaStore.getPizzaInfo);
+    router.push("/cart");
   }
 };
 

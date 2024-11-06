@@ -6,7 +6,7 @@
       class="sheet address-form"
     >
       <div class="address-form__header">
-        <b>Адрес №{{ address.id }}</b>
+        <b>Адрес №{{ address.id }}. {{ address.name }}</b>
         <div class="address-form__edit">
           <button
             type="button"
@@ -17,7 +17,7 @@
           </button>
         </div>
       </div>
-      <p>{{ (address.street, address.building, address.flat) }}</p>
+      <p>{{ address.street }}, {{ address.building }}, {{ address.flat }}</p>
       <small>{{ address.comment }}</small>
     </div>
   </div>

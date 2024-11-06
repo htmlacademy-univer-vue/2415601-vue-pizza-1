@@ -55,8 +55,7 @@
           class="button"
           :disabled="
             !cartStore.pizzas.length ||
-            address.street === '' ||
-            address.building === ''
+            ( addressOption > 0 && (address.street === '' || address.building === ''))
           "
         >
           Оформить заказ
@@ -79,9 +78,10 @@ const router = useRouter();
 
 const profileStore = useProfileStore();
 const cartStore = useCartStore();
-const addressOption = ref(1);
+const addressOption = ref(0);
 
 const setAddressOption = (value) => {
+  console.log(value);
   addressOption.value = value;
 };
 
@@ -99,8 +99,15 @@ const createOrder = () => {
   let orderAddress = "";
 
   if (addressOption.value == 0) {
-    orderAddress = "Заберёт сам";
+    orderAddress = "Заберу сам";
   } else if (addressOption.value == 1) {
+    profileStore.addAddress({
+      ...address,
+      userId: profileStore.id,
+      id: Math.random(),
+      name: "",
+      comment: "",
+    });
     orderAddress = Object.values(address).join(", ");
   } else {
     orderAddress = profileStore.addresses[0].orderAddress;
@@ -118,7 +125,7 @@ const createOrder = () => {
 
   addressOption.value = 1;
   cartStore.clean();
-  router.push("/user/orders");
+  router.push("/success");
 };
 
 const selectList = computed(() => {

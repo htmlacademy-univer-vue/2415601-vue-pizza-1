@@ -45,4 +45,11 @@ export default [
       },
     ],
   },
+  {
+    path: "/success",
+    name: "success",
+    component: () => import("../views/SuccessView.vue"),
+    meta: { layout: "AppLayoutDefault" },
+    children: [],
+  }
 ];
