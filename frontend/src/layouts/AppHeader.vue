@@ -16,14 +16,33 @@
       <router-link :to="{ name: 'cart' }">0 ₽</router-link>
     </div>
     <div class="header__user">
-      <a href="#" class="header__login"><span>Войти</span></a>
+      <router-link :to="{ name: 'profile' }">
+        <picture>
+          <source
+            type="image/webp"
+            srcset="
+              @/assets/img/users/user5.webp    1x,
+              @/assets/img/users/user5@2x.webp 2x
+            "
+          />
+          <img
+            src="@/assets/img/users/user5.jpg"
+            srcset="@/assets/img/users/user5@2x.jpg"
+            alt="Василий Ложкин"
+            width="32"
+            height="32"
+          />
+        </picture>
+        <span>Василий Ложкин</span>
+      </router-link>
+      <router-link :to="{ name: 'home' }" class="header__logout">
+        <span>Выйти</span>
+      </router-link>
     </div>
   </header>
 </template>
-
 <style lang="scss" scoped>
-@import "@/assets/scss/ds-system/ds.scss";
-@import "@/assets/scss/mixins/mixins.scss";
+@import "@/assets/scss/app.scss";
 .header {
   position: relative;
   z-index: 2;
@@ -52,7 +71,7 @@
     transition: 0.3s;
     color: $white;
     background-color: $green-500;
-    background-image: url("../img/cart.svg");
+    background-image: url(@/assets/img/cart.svg);
     background-repeat: no-repeat;
     background-position: 20px center;
     background-size: 29px 27px;
@@ -77,14 +96,11 @@
 
   a {
     display: block;
-
     padding-top: 14px;
     padding-right: 20px;
     padding-bottom: 14px;
     padding-left: 20px;
-
     transition: 0.3s;
-
     background-color: $green-500;
 
     &:hover:not(:active) {
@@ -102,23 +118,17 @@
 
   img {
     display: inline-block;
-
     width: 32px;
     height: 32px;
     margin-right: 8px;
-
     vertical-align: middle;
-
     border-radius: 50%;
   }
 
   span {
     @include r-s14-h16;
-
     display: inline-block;
-
     vertical-align: middle;
-
     color: $white;
   }
 }
@@ -126,15 +136,12 @@
 .header__logout {
   &::before {
     display: inline-block;
-
     width: 32px;
     height: 32px;
     margin-right: 8px;
-
     content: "";
     vertical-align: middle;
-
-    background: url(../img/login.svg) no-repeat center;
+    background: url(@/assets/img/login.svg) no-repeat center;
     background-size: auto 50%;
   }
 }
@@ -142,15 +149,12 @@
 .header__login {
   &::after {
     display: inline-block;
-
     width: 32px;
     height: 32px;
     margin-left: 8px;
-
     content: "";
     vertical-align: middle;
-
-    background: url(../img/login.svg) no-repeat center;
+    background: url(@/assets/img/login.svg) no-repeat center;
     background-size: auto 50%;
   }
 }

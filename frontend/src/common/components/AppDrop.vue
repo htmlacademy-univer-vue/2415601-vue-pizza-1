@@ -1,31 +1,24 @@
 <template>
-    <div
-      @drop.stop="onDrop"
-      @dragover.prevent
-      @dragenter.prevent
-      data-test="AppDrop"
-    >
-      <slot />
-    </div>
-  </template>
-  
-  <script>
-  import { DATA_TRANSFER_PAYLOAD } from "@/common/constants";
-  
-  export default {
-    name: "AppDrop",
-  
-    methods: {
-      onDrop({ dataTransfer }) {
-        if (!dataTransfer) {
-          return;
-        }
-  
-        const payload = dataTransfer.getData(DATA_TRANSFER_PAYLOAD);
-        if (payload) {
-          this.$emit("drop", JSON.parse(payload));
-        }
-      },
-    },
-  };
-  </script>
+  <div @drop.stop="onDrop" @dragover.prevent @dragenter.prevent>
+    <slot />
+  </div>
+</template>
+
+<script setup>
+import { DATA_TRANSFER_PAYLOAD } from "@/common/constants";
+
+const emit = defineEmits(["drop"]);
+
+const onDrop = ({ dataTransfer }) => {
+  if (!dataTransfer) {
+    return;
+  }
+
+  const payload = dataTransfer.getData(DATA_TRANSFER_PAYLOAD);
+  if (payload) {
+    const transferData = dataTransfer.getData(DATA_TRANSFER_PAYLOAD);
+    const data = JSON.parse(transferData);
+    emit("drop", data);
+  }
+};
+</script>
