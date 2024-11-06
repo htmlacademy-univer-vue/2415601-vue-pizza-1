@@ -30,3 +30,60 @@ export const normalizeSauces = (sauce) => {
     sauce: sauce.id ? sauces[sauce.id] : "",
   };
 };
+
+export const normalizeMisc = (misc) => {
+  return {
+    ...misc,
+    quantity: 0,
+  };
+};
+
+export function getImageUrl(path) {
+  const publicUrl = "/api";
+  return `${publicUrl}/${path}`;
+}
+
+export function getFilteredPizzasOfOrder(state) {
+  let filteredPizzas = [];
+  let ingredientss = [];
+
+  state.orderPizzas.map((pizza) => {
+    pizza.ingredients.map((ingredient) =>
+      ingredientss.push({
+        ingredientId: ingredient.ingredientId,
+        quantity: ingredient.quantity,
+      })
+    );
+    filteredPizzas.push({
+      name: pizza.name,
+      quantity: pizza.quantity,
+      ingredients: ingredientss,
+      sauceId: pizza.sauceId,
+      doughId: pizza.doughId,
+      sizeId: pizza.sizeId,
+    });
+  });
+  return filteredPizzas;
+}
+
+export function getFilteredMiscsOfOrder(state) {
+  let filteredMiscs = [];
+
+  if (state.orderMisc) {
+    state.orderMisc.map((misc) => {
+      filteredMiscs.push({
+        miscId: misc.miscId,
+        quantity: misc.quantity,
+      });
+    });
+    return filteredMiscs;
+  } else {
+    return [];
+  }
+}
+
+export function getPizzasWithId(pizzas) {
+  let pizzaArray = [];
+  pizzas.map((pizza) => pizzaArray.push({ ...pizza, id: pizzas.lenght + 1 }));
+  return pizzaArray;
+}

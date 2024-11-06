@@ -7,7 +7,12 @@
         class="additional-list__item sheet"
       >
         <p class="additional-list__description">
-          <img :src="misc.src" width="39" height="60" :alt="misc.name" />
+          <img
+            :src="getImageUrl(misc.image)"
+            width="39"
+            height="60"
+            :alt="misc.name"
+          />
           <span>{{ misc.name }}</span>
         </p>
 
@@ -17,8 +22,8 @@
             :count="misc.quantity"
             :orange="true"
             :max="10"
-            @decrement="decrement(misc.id, misc.quantity - 1)"
-            @increment="increment(misc, misc.quantity + 1)"
+            @decrement="decrement(misc)"
+            @increment="increment(misc)"
           />
 
           <div class="additional-list__price">
@@ -32,6 +37,7 @@
 
 <script setup>
 import { AppCounter } from "../../common/components";
+import { getImageUrl } from "@/common/helpers";
 defineProps({
   miscs: {
     type: Array,
@@ -40,12 +46,14 @@ defineProps({
 });
 const emits = defineEmits(["addMisc, deleteMisc"]);
 
-const decrement = (id) => {
-  emits("deleteMisc", id);
+const decrement = (misc) => {
+  emits("deleteMisc", misc.id);
+  misc.quantity = misc.quantity - 1;
 };
 
 const increment = (misc) => {
   emits("addMisc", misc);
+  misc.quantity = misc.quantity + 1;
 };
 </script>
 

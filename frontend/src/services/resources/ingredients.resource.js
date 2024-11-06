@@ -1,11 +1,11 @@
 import { CrudService } from "@/services/api/crud.service";
 
 export class IngredientResource extends CrudService {
-    constructor() {
-        super("/api/ingredients");
-    }
+  constructor() {
+    super("/api/ingredients");
+  }
 
-    getIngredients() {
-        return this.get();
-    }
+  getIngredients() {
+    return this.get();
+  }
 }

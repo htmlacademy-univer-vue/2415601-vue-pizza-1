@@ -1,12 +1,9 @@
 import { defineStore } from "pinia";
+import resources from "../services/resources";
+import { getPizzasWithId } from "@/common/helpers";
 
 export const useProfileStore = defineStore("profile", {
   state: () => ({
-    id: 0,
-    name: "Василий Ложкин",
-    email: "",
-    avatar: "",
-    phone: "+7 999-999-99-99",
     addresses: [],
     orders: [],
   }),
@@ -17,61 +14,68 @@ export const useProfileStore = defineStore("profile", {
     getOrders: (state) => {
       return state.orders;
     },
-    getName: (state) => {
-      return state.name;
-    },
-    getEmail: (state) => {
-      return state.email;
-    },
-    getAvatar: (state) => {
-      return state.avatar;
-    },
-    getPhone: (state) => {
-      return state.phone;
-    },
   },
   actions: {
-    login(email, password) {
-      // TODO add logic
-      console.log(email, password);
-      this.email = email;
+    async addOrder(order) {
+      const res = await resources.order.addOrder(order);
+      if (res.__state !== "success") {
+        return;
+      } else {
+        let newObject = {
+          id: res.data.id,
+          userId: res.data.userId,
+          addressId: res.data.addressId,
+          orderPizzas: getPizzasWithId(order.pizzas),
+          orderMisc: order.misc,
+          orderAddress: order.address,
+        };
+        this.orders.push(newObject);
+      }
     },
-    logout() {
-      // TODO add logic
-      this.id = 0;
-      this.name = "";
-      this.email = "";
-      this.avatar = "";
-      this.phone = "";
-      this.orders = [];
-      this.addresses = [];
-    },
-    addOrder(order) {
-      this.orders.push(order);
-    },
-    deleteOrder(id) {
-      this.orders = this.orders.filter((order) => order.id !== id);
+    async deleteOrder(id) {
+      const res = await resources.order.removeOrder(id);
+      if (res.__state !== "success") {
+        return;
+      } else {
+        this.orders = this.orders.filter((order) => order.id !== id);
+      }
     },
     clearOrders() {
       this.orders = [];
     },
-    addAddress(address) {
-      this.addresses.push(address);
+    async addAddress(address) {
+      const res = await resources.address.addAddress(address);
+      if (res.__state !== "success") {
+        return;
+      } else {
+        const data = res.data;
+        this.addresses.push(data);
+      }
     },
-    deleteAddress(id) {
-      this.addresses = this.addresses.filter((address) => address.id !== id);
+    async deleteAddress(id) {
+      const res = await resources.address.removeAddress(id);
+      if (res.__state !== "success") {
+        return;
+      } else {
+        this.addresses = this.addresses.filter((address) => address.id !== id);
+      }
     },
-    editAddress(newAddress) {
-      const index = this.addresses.findIndex(
-        (address) => address.id === newAddress.id
-      );
-      this.addresses.splice(index, 1, newAddress);
+    async editAddress(newAddress) {
+      const res = await resources.address.updateAddress(newAddress);
+      if (res.__state !== "success") {
+        return;
+      } else {
+        const index = this.addresses.findIndex(
+          (address) => address.id === newAddress.id
+        );
+        this.addresses.splice(index, 1, newAddress);
+      }
     },
     setAddresses(addresses) {
       this.addresses = addresses;
     },
     setOrders(orders) {
       this.orders = orders;
-    }
+    },
   },
 });
