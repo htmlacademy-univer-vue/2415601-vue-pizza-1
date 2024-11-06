@@ -1,17 +1,17 @@
 <template>
   <div class="sign-form">
-    <router-link :to="{ name: 'home' }" class="close close--white">
+    <router-link to="/" class="close close--white">
       <span class="visually-hidden">Закрыть форму авторизации</span>
     </router-link>
     <div class="sign-form__title">
-      <h1 class="title title--small">Авторизуйтесь на сайте</h1>
+      <SectionTitle size="small">Авторизуйтесь на сайте</SectionTitle>
     </div>
-    <form action="#" method="post">
+    <form action="test.html" method="post" @submit.prevent="login">
       <div class="sign-form__input">
         <label class="input">
           <span>E-mail</span>
           <input
-            v-model="email"
+            v-model="user.email"
             type="email"
             name="email"
             placeholder="example@mail.ru"
@@ -23,7 +23,7 @@
         <label class="input">
           <span>Пароль</span>
           <input
-            v-model="password"
+            v-model="user.password"
             type="password"
             name="pass"
             placeholder="***********"
@@ -36,18 +36,18 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { SectionTitle } from "../common/components";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useProfileStore } from "../stores";
 
 const router = useRouter();
 const profileStore = useProfileStore();
+
 const user = reactive({
   email: "",
   password: "",
 });
-
 const login = () => {
   try {
     profileStore.login(user);
@@ -59,8 +59,7 @@ const login = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/ds-system/ds.scss";
-@import "@/assets/scss/mixins/mixins.scss";
+@import "@/assets/scss/app.scss";
 
 .sign-form {
   @include pf_center-all;
@@ -76,7 +75,7 @@ const login = () => {
   padding-bottom: 32px;
   padding-left: 32px;
 
-  background: $white url("@/assets/img/popup.svg") no-repeat center top;
+  background: $white url("../assets/img/popup.svg") no-repeat center top;
   box-shadow: $shadow-light;
 
   button {

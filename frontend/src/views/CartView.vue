@@ -1,15 +1,19 @@
 <template>
-  <form action="#" method="post" class="layout-form">
+  <form
+    action="test.html"
+    method="post"
+    class="layout-form"
+    @submit.prevent="createOrder"
+  >
     <main class="content cart">
       <div class="container">
         <div class="cart__title">
-          <h1 class="title title--big">Корзина</h1>
+          <SectionTitle size="big">Корзина</SectionTitle>
         </div>
 
         <div v-if="!cartStore.getPizzas.length" class="sheet cart__empty">
           <p>В корзине нет ни одного товара</p>
         </div>
-
         <PizzaList
           v-else
           :pizzas="cartStore.getPizzas"
@@ -18,7 +22,7 @@
         />
 
         <MiscList
-          :miscs="miscs"
+          :miscs="cartStore.getMisc"
           @addMisc="cartStore.addMisc"
           @deleteMisc="cartStore.deleteMisc"
         />
@@ -32,7 +36,6 @@
         />
       </div>
     </main>
-
     <section class="footer">
       <div class="footer__more">
         <router-link class="button button--border button--arrow" to="/">
@@ -52,8 +55,7 @@
           class="button"
           :disabled="
             !cartStore.pizzas.length ||
-            (addressOption > 0 &&
-              (address.street === '' || address.building === ''))
+            ( addressOption > 0 && (address.street === '' || address.building === ''))
           "
         >
           Оформить заказ
@@ -65,40 +67,52 @@
 
 <script setup>
 import { reactive, computed, ref } from "vue";
+import { SectionTitle } from "../common/components";
 import PizzaList from "../modules/cart/PizzaList.vue";
 import MiscList from "../modules/cart/MiscList.vue";
 import AddressForm from "../modules/cart/AddressForm.vue";
-import {
-  useCartStore,
-  useProfileStore,
-  useDataStore,
-} from "../stores";
+import { useCartStore, useProfileStore } from "../stores";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+
 const profileStore = useProfileStore();
 const cartStore = useCartStore();
-const addressOption = ref(1);
+const addressOption = ref(0);
+
 const setAddressOption = (value) => {
+  console.log(value);
   addressOption.value = value;
 };
+
 const address = reactive({
   street: "",
   building: "",
   flat: "",
 });
+
 const setAddressInfo = (category, value) => {
   address[category] = value;
 };
+
 const createOrder = () => {
   let orderAddress = "";
+
   if (addressOption.value == 0) {
-    orderAddress = "Заберёт сам";
+    orderAddress = "Заберу сам";
   } else if (addressOption.value == 1) {
+    profileStore.addAddress({
+      ...address,
+      userId: profileStore.id,
+      id: Math.random(),
+      name: "",
+      comment: "",
+    });
     orderAddress = Object.values(address).join(", ");
   } else {
     orderAddress = profileStore.addresses[0].orderAddress;
   }
+
   const order = {
     id: Date.now(),
     orderPizzas: cartStore.pizzas,
@@ -106,11 +120,14 @@ const createOrder = () => {
     orderAddress,
     price: cartStore.totalCartPrice,
   };
+
   profileStore.addOrder(order);
+
   addressOption.value = 1;
   cartStore.clean();
-  router.push("/user/orders");
+  router.push("/success");
 };
+
 const selectList = computed(() => {
   const list = profileStore.addresses.map((address) => address.name);
   return ["Заберу сам", "Новый адрес", ...list];
@@ -118,18 +135,19 @@ const selectList = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/ds-system/ds.scss";
-@import "@/assets/scss/mixins/mixins.scss";
-
-.container {
-  width: 770px;
-  margin: 0 auto;
-}
-
+@import "@/assets/scss/app.scss";
 .layout-form {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+}
+.content {
+  padding-top: 20px;
+}
+
+.container {
+  width: 770px;
+  margin: 0 auto;
 }
 
 .cart__title {
@@ -143,141 +161,6 @@ const selectList = computed(() => {
 
 .cart__empty {
   padding: 20px 30px;
-}
-
-.cart-form {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.cart-form__select {
-  display: flex;
-  align-items: center;
-
-  margin-right: auto;
-
-  span {
-    margin-right: 16px;
-  }
-}
-
-.cart-form__label {
-  @include b-s16-h19;
-
-  white-space: nowrap;
-}
-
-.cart-form__address {
-  display: flex;
-  align-items: center;
-
-  width: 100%;
-  margin-top: 20px;
-}
-
-.cart-form__input {
-  flex-grow: 1;
-
-  margin-bottom: 20px;
-  margin-left: 16px;
-
-  &--small {
-    max-width: 120px;
-  }
-}
-
-.cart-list {
-  @include clear-list;
-
-  padding: 15px 0;
-}
-
-.cart-list__item {
-  display: flex;
-  align-items: flex-start;
-
-  margin-bottom: 15px;
-  padding-right: 15px;
-  padding-bottom: 15px;
-  padding-left: 15px;
-
-  border-bottom: 1px solid rgba($green-500, 0.1);
-
-  &:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-
-    border-bottom: none;
-  }
-}
-
-.cart-list__product {
-  flex-grow: 1;
-
-  margin-right: auto;
-}
-
-.cart-list__counter {
-  width: 54px;
-  margin-right: auto;
-  margin-left: 20px;
-}
-
-.cart-list__price {
-  min-width: 100px;
-  margin-right: 36px;
-  margin-left: 10px;
-
-  text-align: right;
-
-  b {
-    @include b-s16-h19;
-  }
-}
-
-.cart-list__edit {
-  @include l-s11-h13;
-
-  cursor: pointer;
-  transition: 0.3s;
-
-  border: none;
-  outline: none;
-  background-color: transparent;
-
-  &:hover {
-    color: $green-500;
-  }
-
-  &:active {
-    color: $green-600;
-  }
-
-  &:focus {
-    color: $green-400;
-  }
-}
-
-.product {
-  display: flex;
-  align-items: center;
-}
-
-.product__text {
-  margin-left: 15px;
-
-  h2 {
-    @include b-s18-h21;
-
-    margin-top: 0;
-    margin-bottom: 10px;
-  }
-
-  ul {
-    @include clear-list;
-    @include l-s11-h13;
-  }
 }
 
 .footer {
@@ -317,116 +200,5 @@ const selectList = computed(() => {
   button {
     padding: 16px 14px;
   }
-}
-
-.additional-list {
-  @include clear-list;
-
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.additional-list__description {
-  display: flex;
-  align-items: flex-start;
-
-  margin: 0;
-  margin-bottom: 8px;
-}
-
-.additional-list__item {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-
-  width: 200px;
-  margin-right: 15px;
-  margin-bottom: 15px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-
-  img {
-    margin-right: 10px;
-    margin-left: 15px;
-  }
-
-  span {
-    @include b-s14-h16;
-
-    display: inline;
-
-    width: 100px;
-    margin-right: 15px;
-  }
-}
-
-.additional-list__wrapper {
-  display: flex;
-  align-items: center;
-
-  box-sizing: border-box;
-  width: 100%;
-  margin-top: auto;
-  padding-top: 18px;
-  padding-right: 15px;
-  padding-left: 15px;
-
-  border-top: 1px solid rgba($green-500, 0.1);
-}
-
-.additional-list__counter {
-  width: 54px;
-  margin-right: auto;
-}
-
-.additional-list__price {
-  @include b-s16-h19;
-}
-
-.select {
-  @include r-s16-h19;
-
-  display: block;
-
-  margin: 0;
-  padding: 8px 16px;
-  padding-right: 30px;
-
-  cursor: pointer;
-  transition: 0.3s;
-
-  color: $black;
-  border: 1px solid $purple-400;
-  border-radius: 8px;
-  outline: none;
-  background-color: $silver-100;
-  background-image: url("@/assets/img/select.svg");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-
-  font-family: inherit;
-
-  appearance: none;
-
-  &:hover {
-    border-color: $orange-100;
-  }
-
-  &:focus {
-    border-color: $green-500;
-  }
-}
-
-.button--arrow::before {
-  content: "";
-  background-image: url("@/assets/img/button-arrow.svg");
-  background-position: center;
-  background-repeat: no-repeat;
-  margin-right: 16px;
-  width: 18px;
-  height: 18px;
-  display: inline-block;
-  vertical-align: middle;
-  -webkit-transform: translateY(-1px);
 }
 </style>

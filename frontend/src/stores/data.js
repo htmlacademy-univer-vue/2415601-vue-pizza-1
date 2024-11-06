@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
-import doughs from "@/mocks/dough.json";
+import doughs from "@/mocks/dough.json"; // мок данные
 import ingredients from "@/mocks/ingredients.json";
 import sauces from "@/mocks/sauces.json";
 import sizes from "@/mocks/sizes.json";
 import miscs from "@/mocks/misc.json";
+
 import {
+  // функции нормализации
   normalizeDough,
   normalizeSizes,
   normalizeIngredients,
