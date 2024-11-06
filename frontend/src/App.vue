@@ -6,8 +6,9 @@
 </template>
 
 <script setup>
-import { AppLayout } from "@/layouts";
-import { HomeView } from "@/views";
+import AppLayout from "./layouts/AppLayout.vue";
+import AppHeader from "./layouts/AppHeader.vue"
+import HomeView from "./views/HomeView.vue";
 </script>
 
 <style lang="scss">
