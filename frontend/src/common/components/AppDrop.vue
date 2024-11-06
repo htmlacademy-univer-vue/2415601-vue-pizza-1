@@ -5,20 +5,20 @@
 </template>
 
 <script setup>
-import { DATA_TRANSFER_PAYLOAD } from "@/common/constants";
+import { DATA_TRANSFER_PAYLOAD } from "../constants";
 
 const emit = defineEmits(["drop"]);
 
-const onDrop = ({ dataTransfer }) => {
+function onDrop({ dataTransfer }) {
   if (!dataTransfer) {
     return;
   }
-
   const payload = dataTransfer.getData(DATA_TRANSFER_PAYLOAD);
   if (payload) {
-    const transferData = dataTransfer.getData(DATA_TRANSFER_PAYLOAD);
-    const data = JSON.parse(transferData);
-    emit("drop", data);
+    const transferData = JSON.parse(
+      dataTransfer.getData(DATA_TRANSFER_PAYLOAD)
+    );
+    emit("drop", transferData);
   }
-};
+}
 </script>

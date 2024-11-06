@@ -1,12 +1,13 @@
-<script setup>
-import AppLayout from "@/layouts/AppLayout.vue";
-</script>
-
 <template>
-  <AppLayout>
+  <app-layout>
     <router-view />
-  </AppLayout>
+  </app-layout>
 </template>
+
+<script setup>
+import { AppLayout } from "@/layouts";
+// import { HomeView } from "@/views";
+</script>
 
 <style lang="scss">
 @import "@/assets/scss/app.scss";

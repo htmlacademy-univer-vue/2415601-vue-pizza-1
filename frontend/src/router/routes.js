@@ -1,40 +1,48 @@
-const routes = [
+export default [
   {
     path: "/",
-    name: "home",
+    name: "HomeView",
     component: () => import("../views/HomeView.vue"),
-    meta: { layout: "AppLayoutDefault" },
+    meta: { layout: "AppLayoutHeader" },
+    children: [],
   },
   {
-    path: "/login",
-    name: "login",
-    component: () => import("@/views/LoginView.vue"),
-    meta: { layout: "SimpleLayout" },
+    path: "/:id",
+    name: "EditPizza",
+    component: () => import("../views/HomeView.vue"),
+    meta: { layout: "AppLayoutHeader" },
+    children: [],
+  },
+  {
+    path: "/sign-in",
+    name: "LoginView",
+    component: () => import("../views/LoginView.vue"),
+    meta: { layout: "AppLayoutDefault" },
+    children: [],
   },
   {
     path: "/cart",
-    name: "cart",
-    component: () => import("@/views/CartView.vue"),
-    meta: { layout: "AppLayoutDefault" },
+    name: "CartView",
+    component: () => import("../views/CartView.vue"),
+    meta: { layout: "AppLayoutHeader" },
+    children: [],
   },
   {
     path: "/user",
-    name: "user",
-    component: () => import("@/views/UserView.vue"),
-    meta: { layout: "AppLayoutDefault" },
+    name: "UserView",
+    component: () => import("../views/UserView.vue"),
+    meta: { layout: "AppLayoutUser" },
     children: [
       {
-        path: "orders",
-        name: "orders",
-        component: () => import("@/views/OrdersView.vue"),
+        path: "profile",
+        name: "ProfileView",
+        component: () => import("../views/ProfileView.vue"),
       },
       {
-        path: "profile",
-        name: "profile",
-        component: () => import("@/views/ProfileView.vue"),
+        path: "orders",
+        name: "OrdersView",
+        component: () => import("../views/OrdersView.vue"),
       },
     ],
   },
 ];
-
-export default routes;

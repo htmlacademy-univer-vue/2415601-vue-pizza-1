@@ -1,95 +1,60 @@
 <template>
-  <div class="counter" :class="{ ingredients__counter: ingredientsCounter }">
+  <div class="counter counter--orange">
     <button
       type="button"
       class="counter__button counter__button--minus"
-      :disabled="value === min"
-      @click="decrement"
+      :disabled="count === 0"
+      @click="emits('decrement')"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
-    <input
-      type="text"
-      name="counter"
-      class="counter__input"
-      :value="value"
-      @input="set"
-    />
+    <input type="text" name="counter" class="counter__input" :value="count" />
     <button
       type="button"
       class="counter__button counter__button--plus"
-      :class="{ 'counter__button--orange': accent }"
-      :disabled="value === max"
-      @click="increment"
+      :class="orange === true && 'counter__button--orange'"
+      :disabled="count === max"
+      @click="emits('increment')"
     >
       <span class="visually-hidden">Больше</span>
     </button>
   </div>
 </template>
 
-<script lang="ts" setup>
-const props = defineProps({
-  value: {
-    type: Number,
-    required: true,
-  },
-  accent: {
-    type: Boolean,
-    default: false,
-  },
-  max: {
-    type: Number,
-    default: 3,
-  },
-  min: {
-    type: Number,
-    default: 0,
-  },
-  ingredientsCounter: {
-    type: Boolean,
-    default: true,
-  },
+<script setup>
+defineProps({
+  count: { type: Number, default: 0 },
+  orange: { type: Boolean, default: false },
+  max: { type: Number, default: 3 },
 });
-const emit = defineEmits(["update:value"]);
-
-const set = (event) => {
-  const newValue = Number(event.target.value) || 0;
-  emit("update:value", newValue);
-};
-
-const increment = () => {
-  if (props.value < props.max) {
-    emit("update:value", props.value + 1);
-  }
-};
-
-const decrement = () => {
-  if (props.value > props.min) {
-    emit("update:value", props.value - 1);
-  }
-};
+const emits = defineEmits(["increment", "decrement"]);
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/app.scss";
+.counter {
+  display: flex;
 
-.ingredients__counter {
-  width: 54px;
-  margin-top: 10px;
-  margin-left: 36px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .counter__button {
   $el: &;
   $size_icon: 50%;
+
   position: relative;
+
   display: block;
+
   width: 16px;
   height: 16px;
   margin: 0;
   padding: 0;
+
   cursor: pointer;
   transition: 0.3s;
+
   border: none;
   border-radius: 50%;
   outline: none;
@@ -99,9 +64,12 @@ const decrement = () => {
 
     &::before {
       @include p_center-all;
+
       width: $size_icon;
       height: 2px;
+
       content: "";
+
       border-radius: 2px;
       background-color: $black;
     }
@@ -132,19 +100,25 @@ const decrement = () => {
 
     &::before {
       @include p_center-all;
+
       width: $size_icon;
       height: 2px;
+
       content: "";
+
       border-radius: 2px;
       background-color: $white;
     }
 
     &::after {
       @include p_center-all;
+
       width: $size_icon;
       height: 2px;
+
       content: "";
       transform: translate(-50%, -50%) rotate(90deg);
+
       border-radius: 2px;
       background-color: $white;
     }
@@ -163,6 +137,7 @@ const decrement = () => {
 
     &:disabled {
       cursor: default;
+
       opacity: 0.3;
     }
   }
@@ -182,11 +157,14 @@ const decrement = () => {
 
 .counter__input {
   @include r-s14-h16;
+
   box-sizing: border-box;
   width: 22px;
   margin: 0;
   padding: 0 3px;
+
   text-align: center;
+
   color: $black;
   border: none;
   border-radius: 10px;
@@ -196,11 +174,5 @@ const decrement = () => {
   &:focus {
     box-shadow: inset $shadow-regular;
   }
-}
-.counter {
-  display: flex;
-
-  justify-content: space-between;
-  align-items: center;
 }
 </style>

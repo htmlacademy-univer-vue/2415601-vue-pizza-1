@@ -1,34 +1,35 @@
 <template>
-  <div class="layout__title">
-    <h1 class="title title--big">Мои данные</h1>
-  </div>
+  <main class="layout">
+    <div class="layout__content">
+      <div class="layout__title">
+        <SectionTitle size="big">Мои данные</SectionTitle>
+      </div>
 
-  <div class="user">
-    <picture>
-      <source
-        type="image/webp"
-        srcset="
-          @/assets/img/users/user5@2x.webp 1x,
-          @/assets/img/users/user5@4x.webp 2x
-        "
-      />
-      <img
-        src="@/assets/img/users/user5@2x.jpg"
-        srcset="@/assets/img/users/user5@4x.jpg"
-        :alt="profileStore.name"
-        width="72"
-        height="72"
-      />
-    </picture>
-    <div class="user__name">
-      <span>{{ profileStore.name }}</span>
-    </div>
-    <p class="user__phone">Контактный телефон: <span>{{ profileStore.phone }}</span></p>
-  </div>
+      <div class="user">
+        <picture>
+          <source
+            type="image/webp"
+            srcset="img/users/user5@2x.webp 1x, img/users/user5@4x.webp 2x"
+          />
+          <img
+            src="@/assets/img/users/user5@2x.jpg"
+            srcset="@/assets/img/users/user5@4x.jpg"
+            :alt="profileStore.name"
+            width="72"
+            height="72"
+          />
+        </picture>
+        <div class="user__name">
+          <span>{{ profileStore.name }}</span>
+        </div>
+        <p class="user__phone">
+          Контактный телефон: <span>{{ profileStore.phone }}</span>
+        </p>
+      </div>
 
-  <AddressesList :addresses="profileStore.addresses" @openForm="openForm" />
+      <AddressesList :addresses="profileStore.addresses" @openForm="openForm" />
 
-  <AddressForm
+      <AddressForm
         :status="opened"
         :address-params="addressParams"
         :action-type="actionType"
@@ -37,18 +38,21 @@
         @setAddressInfo="setValueAddress"
       />
 
-  <div class="layout__button">
-    <button
+      <div class="layout__button">
+        <button
           type="button"
           class="button button--border"
           @click="openForm('add', {})"
         >
-      Добавить новый адрес
-    </button>
-  </div>
+          Добавить новый адрес
+        </button>
+      </div>
+    </div>
+  </main>
 </template>
 
 <script setup>
+import { SectionTitle } from "../common/components";
 import { useProfileStore } from "../stores";
 import { reactive, ref } from "vue";
 import AddressesList from "../modules/profile/AddressesList.vue";
@@ -57,6 +61,7 @@ const profileStore = useProfileStore();
 const actionType = ref("");
 const opened = ref(false);
 console.log(opened.value);
+
 let addressParams = reactive({
   name: "",
   street: "",
@@ -66,10 +71,12 @@ let addressParams = reactive({
   // userId: profileStore.id,
   // id: Math.random(),
 });
+
 const setValueAddress = (option, value) => {
   console.log(value);
   addressParams[option] = value;
 };
+
 const save = () => {
   if (actionType.value == "edit") {
     console.log(addressParams);
@@ -91,6 +98,7 @@ const save = () => {
   addressParams.comment = "";
   addressParams.userId = profileStore.id;
 };
+
 const openForm = (action, order) => {
   console.log("сработало");
   if (action == "edit") {
@@ -113,11 +121,7 @@ const openForm = (action, order) => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/ds-system/ds.scss";
-
-.layout__address {
-  margin-top: 16px;
-}
+@import "@/assets/scss/app.scss";
 
 .user {
   display: flex;
@@ -250,7 +254,7 @@ const openForm = (action, order) => {
   border-radius: 50%;
   outline: none;
   background-color: $white;
-  background-image: url("@/assets/img/edit.svg");
+  background-image: url("../assets/img/edit.svg");
   background-repeat: no-repeat;
   background-position: center;
 

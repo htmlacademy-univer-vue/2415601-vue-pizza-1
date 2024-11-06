@@ -8,6 +8,9 @@ export const usePizzaStore = defineStore("pizza", {
     size: {},
     sauce: {},
     ingredients: [],
+    // dough: { name:'Тонкое', doughSize: 'light', price: 300},
+    // size: {name:'32 см', size: 'small', multiplier: 1},
+    // sauce: {name:'Томатный', sauce: 'tomato', price: 50},
   }),
   getters: {
     getDough: (state) => {
