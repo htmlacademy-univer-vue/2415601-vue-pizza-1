@@ -3,8 +3,8 @@
     <form action="#" method="post">
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
-        <DoughChooser v-model="pizza.dough" :doughs="dougs" />
-        <DiameterChooser v-model="pizza.size" :diameter="sizes" />
+        <DoughChooser v-model="pizzaStore.dough" :doughs="dataStore.dough" />
+        <DiameterChooser v-model="pizzaStore.size" :diameter="dataStore.sizes" />
         <div class="content__ingredients">
           <div class="sheet">
             <h2 class="title title--small sheet__title">
@@ -12,23 +12,23 @@
             </h2>
 
             <div class="sheet__content ingredients">
-              <SauceChooser v-model="pizza.sauce" :sauces="sauces" />
+              <SauceChooser v-model="pizzaStore.sauce" :sauces="dataStore.sauce" />
               <IngredientsChooser
-                v-model="pizza.ingredients"
-                :ingredients="ingredients"
-                @update:model-value="updateIngredients"
+                v-model="pizzaStore.ingredients"
+                :ingredients="dataStore.ingredients"
+                @update:model-value="pizzaStore.upgradeIngredientAmoun"
               />
             </div>
           </div>
         </div>
 
         <div class="content__pizza">
-          <PizzaNameInput v-model="pizza.name" />
+          <PizzaNameInput v-model="pizzaStore.name" />
           <PizzaObject
-            :dough="pizza.dough"
-            :sauce="pizza.sauce"
-            :ingredients="pizza.ingredients"
-            @drop="addIngredient"
+            :dough="pizzaStore.dough"
+            :sauce="pizzaStore.sauce"
+            :ingredients="pizzaStore.ingredients"
+            @drop="pizzaStore.addIngredient"
           />
           <div class="content__result">
             <p>Итого: {{ price }} ₽</p>
@@ -67,6 +67,32 @@ import sizesJSON from "@/mocks/sizes.json";
 import { Ingredients } from "../modules/constructor/IngedientChooserHelper";
 import getPrice from "@/common/helpers/price";
 import isDisableCookButton from "@/common/helpers/disableButton";
+
+import { useDataStore, usePizzaStore, useCartStore } from "../stores";
+import { useRoute } from "vue-router";
+const cartStore = useCartStore();
+const dataStore = useDataStore();
+const pizzaStore = usePizzaStore();
+const route = useRoute();
+const { id } = route.params;
+if (id)
+  pizzaStore.setPizzaState(cartStore.pizzas.find((pizza) => pizza.id === +id));
+else
+  pizzaStore.setPizzaState({
+    id: Math.random(),
+    name: "",
+    dough: dataStore.dough[0],
+    size: dataStore.sizes[0],
+    sauce: dataStore.sauce[0],
+    ingredients: [],
+  });
+const addPizza = () => {
+  if (id) {
+    cartStore.editPizza(pizzaStore.getPizzaInfo);
+  } else {
+    cartStore.addPizza(pizzaStore.getPizzaInfo);
+  }
+};
 
 const dougs = doughJSON.map(normalizeDough);
 const ingredients = ingredientsJSON.map(normalizeIngredients);
