@@ -44,8 +44,10 @@ import SauceChooser from "../modules/constructor/SauceChooser.vue";
 import IngredientsChooser from "../modules/constructor/IngredientsChooser.vue";
 import PizzaObject from "../modules/constructor/PizzaObject.vue";
 import PizzaNameInput from "../modules/constructor/PizzaNameInput.vue";
+
 import { ref } from "vue";
 import { Ingredients } from "../modules/constructor/IngedientChooserHelper";
+
 const doughtValue = ref("");
 const diameterEnumValue = ref("");
 const pizzaNameValue = ref("");
@@ -54,8 +56,7 @@ const ingredientsValue = ref(new Ingredients());
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/ds-system/ds.scss";
-@import "@/assets/scss/mixins/mixins.scss";
+@import "@/assets/scss/app.scss";
 
 .content {
     padding-top: 20px;
