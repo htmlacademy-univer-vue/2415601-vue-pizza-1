@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+
 export const useProfileStore = defineStore('profile', {
 	state: () => ({
 		id: 0,
@@ -29,5 +30,33 @@ export const useProfileStore = defineStore('profile', {
 			return state.phone;
 		}
 	},
-	actions: {}
+	actions: {
+		login(email, password) {
+			console.log(email, password);
+		},
+		logout() {
+			state.id = 0;
+			state.name = "";
+			state.email = "";
+			state.avatar = "";
+			state.phone = "";
+			state.orders = [];
+			state.addresses = [];
+		},
+		addOrder(order){
+			state.orders.push(order);
+		},
+		deleteOrder(id) {
+			state.orders = state.orders.filter((order) => order.id !== id);
+		},
+		clearOrders() {
+			state.orders = [];
+		},
+		addAddress(address) {
+			state.addresses.push(address);
+		},
+		deleteAddress(id) {
+			state.addresses = state.addresses.filter((address) => address.id !== id);
+		},
+	}
 })
