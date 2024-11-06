@@ -1,7 +1,8 @@
 <template>
-  <app-layout>
-    <home-view />
-  </app-layout>
+  <AppLayout>
+    <AppHeader></AppHeader>
+    <HomeView></HomeView>
+  </AppLayout>
 </template>
 
 <script setup>
