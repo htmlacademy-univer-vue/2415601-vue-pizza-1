@@ -1,85 +1,45 @@
 <template>
-  <div class="app_layout">
-    <app-header />
+  <component :is="layout">
     <slot />
-  </div>
+  </component>
 </template>
 
 <script setup>
-import AppHeader from "./AppHeader.vue";
+import { shallowRef, watch } from "vue";
+import { useRoute } from "vue-router";
+import AppLayoutDefault from "./AppLayoutDefault.vue";
+
+const route = useRoute();
+const layout = shallowRef(null);
+
+watch(
+  () => route.meta,
+  async (meta) => {
+    try {
+      if (meta.layout) {
+        const component = await import(`./${meta.layout}.vue`);
+        layout.value = component?.default || AppLayoutDefault;
+      } else {
+        layout.value = AppLayoutDefault;
+      }
+    } catch (e) {
+      console.log("error");
+      console.error("Динамический шаблон не найден. Установлен шаблон по-умолчанию.", e);
+      layout.value = AppLayoutDefault;
+    }
+  }
+);
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/ds-system/ds.scss";
-@import "@/assets/scss/mixins/mixins.scss";
-.layout__sidebar {
-  position: fixed;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  width: 180px;
-  height: 100%;
-  background-color: rgba($green-500, 0.05);
+@import "@/assets/scss/app.scss";
+.app_layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
-
-.layout__logo {
-  display: block;
-  margin-bottom: 30px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-
-  background-color: $green-500;
-
-  img {
-    display: block;
-
-    margin: 0 auto;
-  }
-}
-
-.layout__link {
-  @include b-s14-h16;
-
-  display: block;
-
-  padding: 8px 14px;
-
-  transition: 0.3s;
-
-  color: $black;
-
-  &--active {
-    background-color: rgba($green-500, 0.1);
-  }
-
-  &:hover {
-    background-color: rgba($green-500, 0.2);
-  }
-
-  &:active {
-    color: rgba($black, 0.5);
-  }
-}
-
-.layout__content {
-  padding-top: 22px;
-  padding-right: 2.12%;
-  padding-left: 200px;
-}
-
-.layout__title {
-  margin-bottom: 27px;
-}
-
-.layout__button {
-  margin-top: 40px;
-
-  button {
-    padding: 12px 23px;
-  }
-}
-
-.layout__address {
-  margin-top: 16px;
+.content {
+  display: flex;
+  flex-grow: 1;
 }
 </style>
