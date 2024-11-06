@@ -37,9 +37,25 @@
 
 <script setup>
 import { ref } from "vue";
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
+import { useProfileStore } from "../stores";
 
-const email = ref("");
-const password = ref("");
+const router = useRouter();
+const profileStore = useProfileStore();
+const user = reactive({
+  email: "",
+  password: "",
+});
+
+const login = () => {
+  try {
+    profileStore.login(user);
+    router.push("/user");
+  } catch (error) {
+    alert(error);
+  }
+};
 </script>
 
 <style lang="scss" scoped>
