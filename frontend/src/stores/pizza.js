@@ -1,6 +1,14 @@
 import { defineStore } from 'pinia'
 export const usePizzaStore = defineStore('pizza', {
-	state: () => ({}),
+	state: () => ({
+		pizza: {
+			name: "",
+			dough: {},
+			size: {},
+			sauce: {},
+			ingredients: [],
+		  },
+	}),
 	getters: {},
 	actions: {}
 })
