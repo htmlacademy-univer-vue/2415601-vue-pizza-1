@@ -22,7 +22,7 @@
           class="pizza"
           :class="`pizza--foundation--${dough.doughSize}-${sauce.sauce}`"
         >
-          <div class="pizza__wrapper">
+          <transition-group name="scale" tag="div" class="pizza__wrapper">
             <div
               v-for="(quantity, ingredient) in pizzaIngredients"
               :key="ingredient"
@@ -33,7 +33,7 @@
                 quantity === 3 && 'pizza__filling--third',
               ]"
             />
-          </div>
+          </transition-group>
         </div>
       </div>
     </AppDrop>
@@ -306,5 +306,17 @@ const setName = (name) => {
   &--tomatoes.pizza__filling--third::after {
     background-image: url("../../assets/img/filling-big/tomatoes.svg");
   }
+}
+
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.5s ease;
+}
+
+.scale-enter,
+.scale-leave-to {
+  transform: scale(1.1);
+
+  opacity: 0;
 }
 </style>

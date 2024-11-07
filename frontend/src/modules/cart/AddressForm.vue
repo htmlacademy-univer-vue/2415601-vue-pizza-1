@@ -30,48 +30,50 @@
         />
       </label>
 
-      <div v-if="addressOption > 0" class="cart-form__address">
-        <span class="cart-form__label">Новый адрес:</span>
+      <transition name="fade" mode="out-in">
+        <div v-if="addressOption > 0" class="cart-form__address">
+          <span class="cart-form__label">Новый адрес:</span>
 
-        <div class="cart-form__input">
-          <label class="input">
-            <span>Улица*</span>
-            <input
-              type="text"
-              name="street"
-              required="true"
-              :value="address.street"
-              @input="emit('setAddressInfo', 'street', $event.target.value)"
-            />
-          </label>
-        </div>
+          <div class="cart-form__input">
+            <label class="input">
+              <span>Улица*</span>
+              <input
+                type="text"
+                name="street"
+                required="true"
+                :value="address.street"
+                @input="emit('setAddressInfo', 'street', $event.target.value)"
+              />
+            </label>
+          </div>
 
-        <div class="cart-form__input cart-form__input--small">
-          <label class="input">
-            <span>Дом*</span>
-            <input
-              type="text"
-              name="house"
-              required="true"
-              :value="address.building"
-              @input="emit('setAddressInfo', 'building', $event.target.value)"
-            />
-          </label>
-        </div>
+          <div class="cart-form__input cart-form__input--small">
+            <label class="input">
+              <span>Дом*</span>
+              <input
+                type="text"
+                name="house"
+                required="true"
+                :value="address.building"
+                @input="emit('setAddressInfo', 'building', $event.target.value)"
+              />
+            </label>
+          </div>
 
-        <div class="cart-form__input cart-form__input--small">
-          <label class="input">
-            <span>Квартира</span>
-            <input
-              type="text"
-              name="apartment"
-              required="false"
-              :value="address.flat"
-              @input="emit('setAddressInfo', 'flat', $event.target.value)"
-            />
-          </label>
+          <div class="cart-form__input cart-form__input--small">
+            <label class="input">
+              <span>Квартира</span>
+              <input
+                type="text"
+                name="apartment"
+                required="false"
+                :value="address.flat"
+                @input="emit('setAddressInfo', 'flat', $event.target.value)"
+              />
+            </label>
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -169,6 +171,31 @@ const emit = defineEmits(["setAddressOption", "setAddressInfo"]);
 
   &:focus {
     border-color: $green-500;
+  }
+}
+
+.fade-enter-active {
+  animation: fadeIn 0.5s;
+}
+/* Анимация исчезновения */
+.fade-leave-active {
+  animation: fadeOut 0.5s;
+}
+/* CSS-правила для анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 </style>

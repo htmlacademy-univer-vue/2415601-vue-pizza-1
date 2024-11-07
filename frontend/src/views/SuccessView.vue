@@ -1,6 +1,12 @@
 <template>
+  <!-- <transition name="fade" mode="out-in"> -->
   <div class="popup">
-    <router-link :to="{ name: 'OrdersView' }" class="close">
+    <router-link
+      :to="
+        authStore.user !== null ? { name: 'OrdersView' } : { name: 'HomeView' }
+      "
+      class="close"
+    >
       <span class="visually-hidden">Закрыть попап</span>
     </router-link>
     <div class="popup__title">
@@ -8,14 +14,24 @@
     </div>
     <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
     <div class="popup__button">
-      <router-link :to="{ name: 'OrdersView' }" class="button"
+      <router-link
+        :to="
+          authStore.user !== null
+            ? { name: 'OrdersView' }
+            : { name: 'HomeView' }
+        "
+        class="button"
         >Отлично, я жду!</router-link
       >
     </div>
   </div>
+  <!-- </transition> -->
 </template>
 
-<script setup></script>
+<script setup>
+import { useAuthStore } from "../stores";
+const authStore = useAuthStore();
+</script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/app.scss";
@@ -81,4 +97,29 @@
     padding: 16px 32px;
   }
 }
+
+// .fade-enter-active {
+//   animation: fadeIn 0.5s;
+// }
+// /* Анимация исчезновения */
+// .fade-leave-active {
+//   animation: fadeOut 0.5s;
+// }
+// /* CSS-правила для анимации */
+// @keyframes fadeIn {
+//   from {
+//     opacity: 0;
+//   }
+//   to {
+//     opacity: 1;
+//   }
+// }
+// @keyframes fadeOut {
+//   from {
+//     opacity: 1;
+//   }
+//   to {
+//     opacity: 0;
+//   }
+// }
 </style>

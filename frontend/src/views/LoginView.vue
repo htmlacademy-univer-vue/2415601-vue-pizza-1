@@ -34,15 +34,18 @@
       </div>
       <button type="submit" class="button">Авторизоваться</button>
     </form>
+    <div v-if="hasWarning">Неправильный логин или пароль!</div>
   </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { SectionTitle } from "../common/components";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores";
 
+const hasWarning = ref(false);
 const router = useRouter();
 const authStore = useAuthStore();
 
@@ -53,7 +56,14 @@ const user = reactive({
 const login = async () => {
   authStore.login(user);
   authStore.whoAmI();
-  router.push("/user/profile");
+  if (authStore.isAuthenticated) {
+    setTimeout(() => {
+      router.push("/user/profile");
+    }, "1000");
+  } else {
+    hasWarning.value = true;
+  }
+  // router.push("/user/profile");
 };
 </script>
 
