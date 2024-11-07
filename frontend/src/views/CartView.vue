@@ -143,13 +143,10 @@ const createOrder = () => {
       flat: address.flat,
       comment: "",
     });
-    // orderAddress = Object.values(address).join(", ");
-  } else {
-    // orderAddress = profileStore.addresses[0].orderAddress;
   }
 
   const order = {
-    userId: authStore.user.id,
+    userId: authStore.user?.id ?? null,
     pizzas: cartStore.getFilteredPizzas,
     misc: cartStore.getFilteredMiscs,
     address: {

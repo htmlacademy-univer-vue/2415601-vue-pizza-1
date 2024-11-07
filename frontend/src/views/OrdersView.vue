@@ -56,7 +56,7 @@
           </div>
         </div>
 
-        <ul class="order__list">
+        <transition-group name="fade" tag="ul" class="order__list">
           <li
             v-for="pizza in order.orderPizzas"
             :key="pizza.id"
@@ -99,7 +99,7 @@
               }}
             </p>
           </li>
-        </ul>
+        </transition-group>
 
         <ul class="order__additional">
           <li v-for="misc in order.orderMisc" :key="misc.id">
@@ -336,5 +336,30 @@ const getTotalOrderPrice = (pizzas, miscs) => {
   padding: 16px 10px;
 
   border-top: 1px solid rgba($green-500, 0.1);
+}
+
+.fade-enter-active {
+  animation: fadeIn 0.5s;
+}
+/* Анимация исчезновения */
+.fade-leave-active {
+  animation: fadeOut 0.5s;
+}
+/* CSS-правила для анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 </style>
